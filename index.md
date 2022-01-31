@@ -3,7 +3,12 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 layout: home
-title: ""
+title: Home
+
+# theme settings
+sidebar:
+    nav: "docs"
+author_profile: true
 ---
 # Introduction :snail:
 
@@ -24,13 +29,15 @@ when evaluated.
 
 # Hello World
 
-``` 
+
+```reasonml
 class Main {
     main() {
         print_string("hello, world");
     };
 };
 ```
+
 
 # Work in Progress
 This documentation (along with the snail language itself) is a current work in

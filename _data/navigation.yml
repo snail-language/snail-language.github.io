@@ -1,0 +1,22 @@
+main:
+  - title: "Documentation"
+    url: /docs/getting-started
+  - title: "Downloads"
+    url: /download
+  - title: "About"
+    url: /about
+  
+
+docs:
+  - title: "Using snail"
+    children:
+      - title: "Getting Started"
+        url: /docs/getting-started
+      - title: "Language Basics"
+        url: /docs/language-basics
+      - title: "Built-In Classes"
+        url: /docs/classes
+  - title: "Implementing snail"
+    children:
+      - title: "Specification"
+        url: /docs/specification
