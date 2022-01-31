@@ -2,13 +2,13 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-layout: home
-title: Home
-
+layout: single 
+title: Strings Numbers Arrays and Inheritance Language
 # theme settings
 sidebar:
     nav: "docs"
 author_profile: true
+classes: wide
 ---
 # Introduction :snail:
 
