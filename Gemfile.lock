@@ -281,6 +281,7 @@ DEPENDENCIES
   github-pages
   jekyll-feed (~> 0.12)
   jekyll-include-cache
+  jekyll-sitemap
   jemoji
   minima (~> 2.5)
   tzinfo (~> 1.2)
