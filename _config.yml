@@ -49,7 +49,7 @@ plugins:
   - jekyll-remote-theme
   - jekyll-include-cache
   - jekyll-redirect-from
-  - jakyll-sitemap
+  - jekyll-sitemap
 
 # Exclude from processing.
 # The following items will not be processed, by default.
