@@ -72,7 +72,7 @@ plugins:
 
 # theme settings
 after_footer_scripts: 
-  - assets/js/mathjax.js
+  - /assets/js/mathjax.js
 
 include: ["_pages", "_docs"]
 
@@ -90,7 +90,7 @@ footer:
       icon: "fab fa-fw fa-github"
       url: "https://github.com/snail-language"
 
-analytics:
-  provider: "google-gtag"
-  google:
-    tracking_id: "G-PE9V5NKJB0"
+head_scripts:
+  - /assets/js/analytics.js
+
+google-tracking_id: "G-PE9V5NKJB0"
