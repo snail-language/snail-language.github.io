@@ -5,8 +5,8 @@
 layout: single 
 title: Strings Numbers Arrays and Inheritance Language
 # theme settings
-sidebar:
-    nav: "docs"
+# sidebar:
+#     nav: "docs"
 author_profile: true
 classes: wide
 ---
@@ -33,11 +33,13 @@ when evaluated.
 ```reasonml
 class Main {
     main() {
-        print_string("hello, world");
+        print_string("Hello, world.\n");
     };
 };
 ```
 
+More examples of snail programs are available
+[here](https://github.com/snail-language/snail-examples){:target="_blank"}.
 
 # Work in Progress
 This documentation (along with the snail language itself) is a current work in

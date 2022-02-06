@@ -41,7 +41,7 @@ let fourteen = {
     let x = 7;
     let y = 2;
     // x * y is the implicit return of this block
-    x * y
+    x * y;
 };
 ```
 

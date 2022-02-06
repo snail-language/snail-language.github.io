@@ -48,5 +48,8 @@ Note that the reference interpreter can also read well-formed `.sl-lex` and
 * If you are just getting started with snail, have a look at the [Language
   Basics](/language-basics) page for an introduction to snail syntax and
   language features.
+* Check out [this
+  repository](https://github.com/snail-language/snail-examples){:target="_blank"}
+  for some example programs written in snail.
 * For language implementers, please refer to the [Specification](/specification)
   page for a formal specification of the language.
