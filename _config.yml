@@ -97,3 +97,11 @@ analytics:
     tracking_id: "G-PE9V5NKJB0"
 
 google_site_verification: "WxeulDVzXQLzte0EgHgp0kj5r31YxC-PSthGh-RQknM"
+
+defaults:
+  #_posts
+  - scope:
+      path: ""
+      type: posts
+    values:
+      author_profile: true
