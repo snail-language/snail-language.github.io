@@ -3,12 +3,22 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 layout: home 
-title: Strings Numbers Arrays and Inheritance Language
+title: Strings Numbers Arrays and Inheritance Language (snail)
 # theme settings
 # sidebar:
 #     nav: "docs"
 author_profile: true
 classes: wide
+
+header:
+    overlay_image: /assets/images/snail.jpg
+    caption: "Photo credit: [**Kevin Angstadt**](https://github.com/kevinaangstadt)"
+    actions:
+        - label: "Getting Started"
+          url: "/docs/getting-started"
+        - label: "Download"
+          url: "/downloads"
+    overlay_filter: linear-gradient(rgba(123,114,86,0.5), rgba(0,0,0,0.5))
 ---
 # Introduction :snail:
 
