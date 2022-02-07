@@ -34,7 +34,7 @@ let name = if (predefined) {
 
 ### Implicit Returns
 There is no `return` keyword in snail.  The last expression in a block
-or function definition is the returned value.
+or method definition is the returned value.
 
 ```js
 let fourteen = {
@@ -49,7 +49,7 @@ let fourteen = {
 Snail programs are *dynamically typed*.  This means that the type of any
 variable in a snail program is the type of the value most recently assigned to
 it.  This can make for more rapid prototyping, but it can also lead to unusual
-errors when programming.  For example, it trying to add an integer and string
+errors when programming.  For example, attempting to add an integer and string
 will result in a runtime error:
 
 ```js
@@ -71,6 +71,7 @@ class Person {
     init(first, last) {
         first_name = first;
         last_name = last;
+        self;
     };
 
     get_first() {
@@ -99,11 +100,24 @@ The body of a class definition consists of a list of member variable and method
 definitions.  Member variables and methods may share the same names; snail
 differentiates between these two features of a class.
 
+Note that there is no *initializer* method that is called automatically when an
+object is constructed.  Only the member variables are initialized (either to
+default values or to the value of the expression in the declaration).  In the
+example above, the `init` method must be called explicitly.  Note that this
+method returns a reference to itself thereby allowing an object to be created,
+initialized, and assigned in one line of code:
+
+```js
+let p = (new Person).init("Dorothy", "Vaughan");
+```
+
 ### Member Variables
 Member variables are prefixed by the `let` keyword.  They may be
 given an initial value (using an assignment expression) or may be left
-uninitialized.  Uninitialized variables have a value of `Void` and generally 
+uninitialized.  Uninitialized variables have a value of `void` and generally 
 cannot be used.
+
+An object may refer to itself using the `self` identifier.
 
 ### Methods 
 A method is a function that has access to the member variables
@@ -179,11 +193,11 @@ Snail supports many of the expression types found in modern programming
 languages.  All expression types are described below.
 
 ### Arithmetic
-Arithmetic is supported on values of type `Int` in snail.  First `exp1` is
-evaluated and then `exp2`.  These two values are then combined using the
-standard arithmetic operation and this result is the result of the expression.
-Arithmetic produces a value of type `Int`.  Note that snail only has integer
-division.
+Arithmetic is supported on values of type `Int` (64-bit integers) in snail.
+First `exp1` is evaluated and then `exp2`.  These two values are then combined
+using the standard arithmetic operation and this result is the result of the
+expression. Arithmetic produces a value of type `Int`.  Note that snail only has
+integer division.
 
 ```js
 exp1 + exp2 // addition
@@ -199,7 +213,7 @@ apply to sub-expressions of any types using the following rules:
 * If both sub-expressions are `Int`, then standard arithmetic comparison is used
 * If both sub-expressions are `String`, then lexicographic comparison is used
 * If both sub-expressions are `Bool`, then `false < true`
-* If both sub-expressions are `Void`, they are equal
+* If both sub-expressions are `void`, they are equal
 
 On all other types, equality is decided by pointer value.  If two values share
 the same space in memory, they are equal.
@@ -275,9 +289,10 @@ leaves this scope, however, the previous value is restored.  This is known as
 ### Variable Assignment
 Once a variable has been declared (either as a member variable or locally), its
 value may be updated using an assignment expression.  The right hand side of the
-expression is evaluated and replaces the original value for the variable.
-Because snail is dynamically typed, the variable will have the type of the most
-recent assignment.
+expression is evaluated and replaces the original value for the variable. It is
+an error to assign to a variable that has not previously been declared. Because
+snail is dynamically typed, the variable will have the type of the most recent
+assignment.
 
 ```js 
 {
@@ -288,7 +303,7 @@ recent assignment.
 
 ### Constructing Objects
 The `new` keyword constructs a value of the specified type.  This expression
-returns the newly-constructed value.  Snail separates out constructor functions
+returns the newly-constructed value.  Snail separates out constructor method
 from the initial creation of an object, so only the default values for members
 variables are set initially.
 
@@ -296,9 +311,9 @@ variables are set initially.
 new Person
 ```
 
-### Checking if an Object is `Void`
-Programs may use an `isvoid` expression to determine if an value is `Void`.  The
-expression evaluates to `true` if the contained expression is `Void` and evaluates
+### Checking if an Object is `void`
+Programs may use an `isvoid` expression to determine if an value is `void`.  The
+expression evaluates to `true` if the contained expression is `void` and evaluates
 to `false` otherwise.
 
 ```js
@@ -310,7 +325,8 @@ Sequences of expressions may be grouped together with a block expression.  These
 are also used for the body of methods, conditionals, and loops.  Expressions are
 evaluated from top-to-bottom (left-to-right).  The value of a block is the value
 of the last expression in the block.  Each expression in a block is terminated
-by a semicolon.
+by a semicolon. Note that this means that `if` and `while` expressions are also 
+terminated by semicolons.
 
 ```js
 {
@@ -323,13 +339,13 @@ by a semicolon.
 ### Conditionals
 The semantics of conditional expressions is standard.  The predicate is
 evaluated first.  If the predicate is `true`, then the `then` branch is
-evaluated, otherwise the `else` branch is evaluated.  The value of the
+evaluated, otherwise the `else` branch is evaluated.  The value produced by the
 conditional is the value of the evaluated branch.  Both branches of the `if`
 expression are treated as blocks of code (and thus each expression contained
 within the braces needs a semicolon).
 
 ```js
-if (condition) {
+if (condition predicate) {
     a;
 } else {
     b;
@@ -339,7 +355,7 @@ if (condition) {
 ### Loops
 Snail supports `while`-style loops.  The loop guard (predicate) is evaluated
 before each iteration of the loop.  If the predicate is ever `false`, the loop
-terminates and a `Void` value is produced.  If the predicate is `true`, the body
+terminates and a `void` value is produced.  If the predicate is `true`, the body
 of the loop is evaluated and the process repeats.  The body of the `while`
 expression is treated as a block of code (and thus each expression needs to be
 terminated with a semicolon).
@@ -352,26 +368,30 @@ while (guard) {
 
 ### Dispatch
 Dispatch, or method calls, have three supported formats. *Dynamic* dispatch
-calls a method on another value.  First the value is determined.  Then each of
-the arguments is evaluated from left to right.  These values are then stored in
-the parameters of the target value's method.  Inheritance rules are used to
-determine the method that is selected. The body of this method is then
-evaluated, producing the value of this dispatch.
+calls a method on another value.  The number of arguments in a dispatch must
+match the number of parameters in the method definition.
 
-If a dispatch detects an inheritance cycle, the reference implementation will
-exit with an error.
+First, the value is determined.  Then, each of the arguments is evaluated from
+left to right.  These values are then stored in the parameters of the target
+value's method.  Inheritance rules are used to determine the method that is
+selected. Finally, the body of this method is evaluated, producing the value of
+this dispatch.
+
+If the reference implementation detects an inheritance cycle during a dispatch,
+it will exit with an error.
 
 ```js
-exp.method(arg1, ..., argn)
+exp.method(arg1, ..., argn);
 ```
 
 *Static* dispatch allows the programmer to select a method from a specific class
-in a value's inheritance chain.
+in a value's inheritance chain.  Class `B` must be in the inheritance graph of
+`exp`.
 
 ```js
 // Assuming exp inherits from type B, 
 // call method that is defined in class B
-exp@B.method(arg1, ..., argn)
+exp@B.method(arg1, ..., argn);
 ```
 
 *Self* dispatch is a shortcut to allow calling a method on the current self
@@ -379,7 +399,7 @@ object.
 
 ```js
 // Call method on the current object
-method(arg1, ..., argn)
+method(arg1, ..., argn);
 ```
 
 ## Arrays
@@ -394,17 +414,17 @@ will allow for any type of data to be stored.
 ### Constructing Arrays
 Arrays are constructed using a variation of the `new` expression, which includes
 the size of the array in square brackets.  The following creates an array that
-stores ten (10) values.  Note that this syntax is only valid for the Array
-class.  Initially, an Array is constructed with all void values.
+stores ten (10) values.  Note that this syntax is only valid for the `Array`
+class.  Initially, an array is constructed with all void values.
 
 ```js
-let myArray = new[10] Array
+let myArray = new[10] Array;
 ```
 
 ### Accessing Values
-Values are stored contiguously in an Array and can be accessed by placing an
+Values are stored contiguously in an array and can be accessed by placing an
 integer *index* value inside of square brackets after an identifier.  Arrays in
-snail are *zero-indexed* meaning that the valid indices for an Array of length
+snail are *zero-indexed* meaning that the valid indices for an array of length
 $$n$$ are $$ 0 \leqslant i < n $$.
 
 ```js

@@ -10,7 +10,7 @@ sidebar:
     nav: "docs"
 ---
 
-Several classes are built-in to the snail language.  These cannot be redefined
+Several classes are built into the snail language.  These cannot be redefined
 in a program.
 
 ## Object
@@ -44,14 +44,14 @@ fixed size.
 ## Bool
 
 The `Bool` class provides `true` and `false`.  The default initialization for
-variables of type `Bool` is `false` (not `Void`).  It is an error to inherit
+variables of type `Bool` is `false` (not `void`).  It is an error to inherit
 from or redefine `Bool`.
 
 ## Int
 
-The `Int` class provides integers.  There are no methods specific to `Int`.  The
-default initialization for variables of type `Int` is 0 (not `Void`).  It is an
-error to inherit from or redefine `Int`.
+The `Int` class provides integers with 64 bits of precision.  There are no
+methods specific to `Int`.  The default initialization for variables of type
+`Int` is 0 (not `void`).  It is an error to inherit from or redefine `Int`.
 
 ## IO
 The `IO` class provides several methods for performing simple input and output.
@@ -86,7 +86,7 @@ The `IO` class provides several methods for performing simple input and output.
 ## String
 The `String` class provides strings, or sequences of characters.  Note, however,
 that there is no character class in snail.  The default initialization of a
-`String` is `""` (not `Void`).  It is an error to inherit or redefine `String`.
+`String` is `""` (not `void`).  It is an error to inherit or redefine `String`.
 
 ### Methods
 
