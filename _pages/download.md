@@ -22,4 +22,4 @@ your platform is not supported.
 
 | Linux binary (tar.gz) | [x86-64](/assets/releases/1.0.0/snail-1.0.0-linux-x86_64.tar.gz){: .btn .btn--info} | [armhf](/assets/releases/1.0.0/snail-1.0.0-linux-armhf.tar.gz){: .btn .btn--warning} |
 | MacOS binary (tar.gz) | [x86-64](/assets/releases/1.0.0/snail-1.0.0-macos-x86_64.tar.gz){: .btn .btn--info} | [arm64](/assets/releases/1.0.0/snail-1.0.0-macos-arm64.tar.gz){: .btn .btn--danger} |
-| Windows binary (zip) | [x86-64](/assets/releases/1.0.0/snail-1.0.0-win-x86_64.tar.gz){: .btn .btn--info} |
+| Windows binary (zip) | [x86-64](/assets/releases/1.0.0/snail-1.0.0-win-x86_64.zip){: .btn .btn--info} |
