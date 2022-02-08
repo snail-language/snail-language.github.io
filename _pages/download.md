@@ -5,7 +5,7 @@ permalink: /downloads
 
 # theme settings
 toc: true
-toc_sticky: true
+# toc_sticky: true
 sidebar:
     nav: "docs"
 ---
