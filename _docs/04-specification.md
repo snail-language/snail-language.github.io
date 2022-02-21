@@ -34,9 +34,10 @@ Notably, keywords, are treated separately from identifiers.
 
 ### String Literals
 
-Strings are enclosed in double quotes (i.e., "..."). Snail only recognizes one
-*escape sequence*: `\"` during lexing.  This allows double quotes to be embedded
-in a string literal.
+Strings are enclosed in double quotes (i.e., "..."). Snail only recognizes two
+*escape sequences*, `\"` and `\\`, during lexing.  This allows double quotes to
+be embedded in a string literal and a backslash to be the last character in a
+string.
 
 ```js
 "Grace Hopper said, \"A ship in port is safe, but that’s not what ships are built for.\""
