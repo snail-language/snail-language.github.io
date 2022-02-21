@@ -121,6 +121,11 @@ holds the line number.  The second line holds the column number. The third line
 gives the name of the token. The optional fourth line holds additional
 information (i.e., the lexeme) for identifiers, integers, and strings.
 
+#### Line and Column Numbers
+The first line in a file is line 1. Each successive newline character (`\n`)
+increments the line count. Column numbers begin with column 1 and resets on each
+newline.
+
 #### Example
 Given the following input:
 
