@@ -62,7 +62,7 @@ class Main : IO {
 
 Strings may not contain the null character (with integer value 0).  Newline
 characters and carriage returns are also not allowed.  All other characters 
-are not allowed.
+are allowed.
 
 Strings must have an opening and closing quote.  The lexer must reject source
 code that contains malformed strings.
