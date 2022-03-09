@@ -1,0 +1,485 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://snail-language.github.io/assets/sl-ast.schema.json",
+    "title": "SL-AST",
+    "description": "Serialization format for snail ASTs",
+    "type": "array",
+    "items": {
+        "$ref": "#/$defs/class"
+    },
+
+    "$defs": {
+        "class": {
+            "type": "object",
+            "properties": {
+                "class_name": {
+                    "type": "string"
+                },
+                "inherits": {
+                    "type": "string"
+                },
+                "members": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/member"
+                    }
+                },
+                "methods": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/method"
+                    }
+                }
+            },
+            "required": ["class_name", "members", "methods"]
+        },
+
+        "member": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "$ref": "#/$defs/identifier"
+                },
+                "type": {
+                    "type": "string",
+                    "pattern": "^member$"
+                },
+                "init": {
+                    "$ref": "#/$defs/expression"
+                }
+            },
+            "required": ["name", "type"]
+        },
+
+        "method": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "$ref": "#/$defs/identifier"
+                },
+                "type": {
+                    "type": "string",
+                    "pattern": "^method$"
+                },
+                "parameters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/identifier"
+                    }
+                },
+                "body": {
+                    "$ref": "#/$defs/expression"
+                }
+            },
+            "required": ["name", "type", "parameters", "body"]
+        },
+
+        "identifier": {
+            "type": "object",
+            "properties": {
+                "line": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "col": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "required": ["line", "col", "value"]
+        },
+
+        "expression": {
+            "type": "object",
+            "properties": {
+                "line": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "col": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "value": {
+                    "oneOf": [
+                        { "$ref": "#/$defs/assign_expr" },
+                        { "$ref": "#/$defs/array_assign_expr" },
+                        { "$ref": "#/$defs/dynamic_dispatch_expr" },
+                        { "$ref": "#/$defs/static_dispatch_expr" },
+                        { "$ref": "#/$defs/self_dispatch_expr" },
+                        { "$ref": "#/$defs/if_expr" },
+                        { "$ref": "#/$defs/while_expr" },
+                        { "$ref": "#/$defs/block_expr" },
+                        { "$ref": "#/$defs/let_expr" },
+                        { "$ref": "#/$defs/new_expr" },
+                        { "$ref": "#/$defs/new_array_expr" },
+                        { "$ref": "#/$defs/isvoid_expr" },
+                        { "$ref": "#/$defs/math_expr" },
+                        { "$ref": "#/$defs/comparison_expr" },
+                        { "$ref": "#/$defs/not_expr" },
+                        { "$ref": "#/$defs/negate_expr" },
+                        { "$ref": "#/$defs/array_access_expr" },
+                        { "$ref": "#/$defs/ident_expr" },
+                        { "$ref": "#/$defs/number_expr" },
+                        { "$ref": "#/$defs/string_expr" },
+                        { "$ref": "#/$defs/bool_expr" }
+                    ]
+                }
+            },
+            "required": ["line", "col", "value"]
+        },
+
+        "assign_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^assign$"
+                },
+                "lhs": {
+                    "$ref": "#/$defs/identifier"
+                },
+                "rhs": {
+                    "$ref": "#/$defs/expression"
+                }
+            },
+            "required": ["type", "lhs", "rhs"]
+        },
+        "array_assign_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^array-assign$"
+                },
+                "lhs": {
+                    "$ref": "#/$defs/expression"
+                },
+                "index": {
+                    "$ref": "#/$defs/expression"
+                },
+                "rhs": {
+                    "$ref": "#/$defs/expression"
+                }
+            },
+            "required": ["type", "lhs", "index", "rhs"]
+        },
+        "dynamic_dispatch_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^dynamic-dispatch$"
+                },
+                "object": {
+                    "$ref": "#/$defs/expression"
+                },
+                "method": {
+                    "$ref": "#/$defs/identifier"
+                },
+                "args": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/expression"
+                    }
+                }
+            },
+            "required": ["type", "object", "method", "args"]
+        },
+        "static_dispatch_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^static-dispatch$"
+                },
+                "object": {
+                    "$ref": "#/$defs/expression"
+                },
+                "class": {
+                    "$ref": "#/$defs/identifier"
+                },
+                "method": {
+                    "$ref": "#/$defs/identifier"
+                },
+                "args": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/expression"
+                    }
+                }
+            },
+            "required": ["type", "object", "class", "method", "args"]
+        },
+        "self_dispatch_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^self-dispatch$"
+                },
+                "method": {
+                    "$ref": "#/$defs/identifier"
+                },
+                "args": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/expression"
+                    }
+                }
+            },
+            "required": ["type", "method", "args"]
+        },
+        "if_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^if$"
+                },
+                "guard": {
+                    "$ref": "#/$defs/expression"
+                },
+                "then": {
+                    "$ref": "#/$defs/expression"
+                },
+                "else": {
+                    "$ref": "#/$defs/expression"
+                }
+            },
+            "required": ["type", "guard", "then", "else"]
+        },
+        "while_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^while$"
+                },
+                "guard": {
+                    "$ref": "#/$defs/expression"
+                },
+                "body": {
+                    "$ref": "#/$defs/expression"
+                }
+            },
+            "required": ["type", "guard", "body"]
+        },
+        "block_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^block$"
+                },
+                "body": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/expression"
+                    }
+                }
+            },
+            "required": ["type", "body"]
+        },
+        "let_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^let$"
+                },
+                "lhs": {
+                    "$ref": "#/$defs/identifier"
+                },
+                "rhs": {
+                    "$ref": "#/$defs/expression"
+                }
+            },
+            "required": ["type", "lhs"]
+        },
+        "new_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^new$"
+                },
+                "class": {
+                    "$ref": "#/$defs/identifier"
+                }
+            },
+            "required": ["type", "class"]
+        },
+        "new_array_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^new-array$"
+                },
+                "size": {
+                    "$ref": "#/$defs/expression"
+                }
+            },
+            "required": ["type", "size"]
+        },
+        "isvoid_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^isvoid$"
+                },
+                "body": {
+                    "$ref": "#/$defs/expression"
+                }
+            },
+            "required": ["type", "body"]
+        },
+        "math_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^(plus|minus|times|divide)$"
+                },
+                "lhs": {
+                    "$ref": "#/$defs/expression"
+                },
+                "rhs": {
+                    "$ref": "#/$defs/expression"
+                }
+            },
+            "required": ["type", "lhs", "rhs"]
+        },
+        "comparison_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^(equals|lt|lte)$"
+                },
+                "lhs": {
+                    "$ref": "#/$defs/expression"
+                },
+                "rhs": {
+                    "$ref": "#/$defs/expression"
+                }
+            },
+            "required": ["type", "lhs", "rhs"]
+        },
+        "not_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^not$"
+                },
+                "body": {
+                    "$ref": "#/$defs/expression"
+                }
+            },
+            "required": ["type", "body"]
+        },
+        "negate_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^negate$"
+                },
+                "body": {
+                    "$ref": "#/$defs/expression"
+                }
+            },
+            "required": ["type", "body"]
+        },
+        "array_access_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^array-access$"
+                },
+                "object": {
+                    "$ref": "#/$defs/expression"
+                },
+                "index": {
+                    "$ref": "#/$defs/expression"
+                }
+            },
+            "required": ["type", "object", "index"]
+        },
+        "ident_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^identifier$"
+                },
+                "value": {
+                    "$ref": "#/$defs/identifier"
+                }
+            },
+            "required": ["type", "value"]
+        },
+        "number_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^number$"
+                },
+                "line": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "col": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "value": {
+                    "type": "integer"
+                }
+            },
+            "required": ["type", "line", "col", "value"]
+        },
+        "string_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^string$"
+                },
+                "line": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "col": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "required": ["type", "line", "col", "value"]
+        },
+        "bool_expr": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "pattern": "^bool$"
+                },
+                "value": {
+                    "type": "boolean"
+                }
+            },
+            "required": ["type"]
+        }
+    }
+}

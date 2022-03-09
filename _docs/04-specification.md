@@ -8,6 +8,9 @@ toc: true
 # toc_sticky: true
 sidebar:
     nav: "docs"
+  
+page_css:
+  - /assets/css/rr.css
 ---
 
 {: .notice--info}
@@ -97,7 +100,138 @@ Refer to [Langauge Basics](/docs/language-basics) or [SL-LEX Format](#sl-lex-for
 
 ## Snail Syntax
 
+The snail language syntax is provided below using an EBNF grammar.  Tokens are
+indicated by single quotes and are named using [SL-Lex token
+names](#sl-lex-format) or character constants.  Parentheses are used for
+grouping, and regular expression operators have the usual meanings (i.e., `*`
+means zero or more times, `+` means one or more times, and `?` means zero or one
+times).
+
+{% highlight conf %}
+program ::= (class)+
+class   ::= 'class' 'ident' (':' 'ident')? '{' (feature)* '}' ';'
+feature ::= 'let' 'ident' ('=' expr)? ';'
+          | 'ident' '(' ('ident' (',' 'ident')*)? ')' '{' block '}' ';'
+expr    ::= 'ident' '=' expr
+          | expr '[' expr ']' '=' expr
+          | (expr ('@' 'ident')? '.')? 'ident' '(' (expr (',' expr)*)? ')'
+          | 'if' '(' expr ')' '{' block '}' 'else' '{' block '}'
+          | 'while' '(' expr ')' '{' block '}'
+          | block
+          | 'let' 'ident' ('=' expr)?
+          | 'new' 'ident'
+          | 'new' '[' expr ']' 'ident'
+          | 'isvoid' '(' expr ')'
+          | expr '+' expr
+          | expr '-' expr
+          | expr '*' expr
+          | expr '/' expr
+          | expr '==' expr
+          | expr '<' expr
+          | expr '<=' expr
+          | '!' expr
+          | '~' expr
+          | '(' expr ')'
+          | expr '[' expr ']'
+          | 'ident'
+          | 'int'
+          | 'string'
+          | 'true'
+          | 'false'
+block   ::= '{' (expr ';')+ '}'
+
+{% endhighlight %}
+
+Next, we describe each section of this grammar in detail. The snail grammar may
+also be represented using [syntax
+diagrams](https://en.wikipedia.org/wiki/Syntax_diagram) as shown below.
+
+
+[//]: #  https://www.bottlecaps.de/rr/ui
+[//]: #  
+[//]: #  Color is: #64B5CE
+[//]: #  
+[//]: #  add viewBox="0 0 width height" preserveAspectRatio="xMinYMin meet"
+[//]: #  set max-width in rr.css to 2x width
+
+
+### Programs
+
+![](/assets/svg/program.svg){: .program-rr}
+
+Programs consist of one or more classes.
+
+### Classes
+![](/assets/svg/class.svg){: .class-rr}
+
+Classes are named by an identifier, contain zero or more features wrapped in
+curly braces, and are terminated by a semicolon.  
+Additionally, an optional identifier may be provided to indicate inheritance.
+
+It is a parse error if any of the following identifiers (case sensitive) are
+used for a class name:
+- `Array`
+- `Bool`
+- `Int`
+- `IO`
+- `String`
+- `Object`
+
+It is also a parse error if any of the following identifiers (case sensitive)
+are used for an inherited class name:
+- `Array`
+- `Bool`
+- `Int`
+- `String`
+
+Inheritance parse errors should be reported on the colon (`:`) rather than the 
+identifier.
+
+### Features
+![](/assets/svg/feature.svg){: .feature-rr}
+
+Features can be either be *member variables* or *methods*.  A member variable
+may either be initialized or uninitialized.  All features are terminated by
+semicolons.
+
+It is a parse error to name a member variable `self`.  
+
+### Expressions
+![](/assets/svg/expression.svg){: .expression-rr}
+
+Expressions make up the majority of the snail grammar.  The individual behavior
+of each expression type is described on the [Language
+Basics](/docs/language-basics) page.  
+
+It is a parse error to name a local variable `self`.
+
+It is a parse error for the identifier following the square brackets in a `new-array` expression to be anything but `Array` (case sensitive).
+
+### Blocks
+![](/assets/svg/block.svg){: .block-rr}
+
+Blocks wrap a sequence of expressions---each terminated by a semicolon---in
+curly braces.  Blocks are defined separately in the grammar because they are
+used in method definitions, `if` expressions, and `while` expressions.
+
+It is a parse error for a block to be empty.
+  
 ### Precedence
+The precedence of operations, from highest to lowest, is given in the following
+table.
+
+| Operator(s)   | Associativity | Precedence |
+| ------------- | ------------- | ---------- |
+| `.`           | none          | *highest*  |
+| `@`           | none          |            |
+| `~`           | none          |            |
+| `[`           | left          |            |
+| `*` `/`       | left          |            |
+| `+` `-`       | left          |            |
+| `<` `<=` `==` | none          |            |
+| `!`           | none          |            |
+| `=`           | none          | *lowest*   |
+
 
 ## Data Representation
 
@@ -111,6 +245,9 @@ Refer to [Langauge Basics](/docs/language-basics) or [SL-LEX Format](#sl-lex-for
 ### Operational Rules
 
 ## Interchange Formats
+The snail specification provides formats for serializing tokens and abstract
+syntax trees.  These formats designed to be simple to parse either manually or
+using common tools.
 
 ### SL-LEX Format
 The SL-LEX format is used to save a sequence (stream) of tokens to a file.
@@ -192,4 +329,328 @@ The table below maps tokens to their SL-LEX name.
 
 $$^*$$ Contains fourth line with contents of lexeme<br>
 $$^\dagger$$ Case insensitive
+
 ### SL-AST Format
+The SL-AST format is used to save an abstract syntax tree representing a
+syntactically valid snail program to a file.  Files with the `.sl-ast` suffix
+are formatted using [JSON](https://www.json.org), a common data interchange
+format supported by many programming languages.
+
+A snail AST is structured as an `array` of JSON `object` elements, each
+representing a class in the source program.  Beyond requiring proper nesting of
+object (and the correct ordering of arguments and parameters), SL-AST does not
+specify a particular ordering of parameters in objects, order of features in
+classes, or order of classes in a program.  It is generally good practice to 
+maintain the same order as the source snail program, however.
+
+#### Formal Specification
+SL-AST is formally specified by a JSON *schema*.  The most recent version of the
+schema is available [here](/assets/sl-ast.schema.json).  Any number of JSON
+schema validator tools may be used to verify the conformity of an SL-AST file to
+this specification.
+
+#### Informal Specification
+The following is an informal discussion of each of the object types found in an
+SL-AST file.  The formal specification should be referenced for precise
+descriptions.
+
+##### Classes
+
+The following object structure is used to define a class:
+
+```json
+{
+    "class_name": < name of class >,
+    "inherits": < name of class to inherit from >,
+    "members": [ < array of member objects > ],
+    "methods": [ < array of method objects > ]
+}
+```
+
+The `class_name`, `members`, and `methods` properties are required.
+
+##### Members
+
+The following object structure is used to define a member variable:
+
+```json
+{
+    "name": { < identifier object of the variable name > },
+    "type": "member",
+    "init": { < expression object of the initializer value > }
+}
+```
+
+The `name` and `type` properties are required.
+
+##### Methods
+
+The following object structure is used to define a method:
+
+```json
+{
+    "name": { < identifier object of the method name > },
+    "type": "method",
+    "parameters": [ < array of identifier objects > ],
+    "body": { < expression object of the body > }
+}
+```
+
+All properties are required.  Note that
+the `body` property will always be a `block` expression.
+
+
+##### Identifiers
+
+The following object structure is used to define an identifier:
+
+```json
+{
+    "line": < integer line number >,
+    "col": < integer column number >,
+    "value": < string of the identifier name >
+}
+```
+
+All properties are required.  The line and column numbers are positive and
+one-indexed.  They always refer to the first character in the lexeme associated
+with the token.
+
+##### Expressions
+
+The following object structure is used to define an expression:
+
+```json
+{
+    "line": < integer line number >,
+    "col": < integer column number >,
+    "value": { < expression_value object > }
+}
+```
+
+All properties are required.  The line and column numbers are positive and
+one-indexed.  They always refer to the first character of the first lexeme
+associated with the expression.  The `value` property will be one of several
+valid objects described below.
+
+##### Expression Values
+
+The following expression values are supported.  All properties are required
+unless otherwise noted.
+
+* Assignment Expression (`id = exp`)
+  ```json
+  {
+      "type": "assign",
+      "lhs": { < identifier object of id > },
+      "rhs": { < expression object of exp > }
+  }
+  ```
+* Array Assignment Expression (`e1[e2] = e3`)
+  ```json
+  {
+      "type": "array-assign",
+      "lhs": { < expression object of e1 > },
+      "index": { < expression object of e2 > }, 
+      "rhs": { < expression object of e3 > }
+  }
+  ```
+* Dynamic Dispatch Expression (`e1.id(args)`)
+  ```json
+  {
+      "type": "dynamic-dispatch",
+      "object": { < expression object of e1 > },
+      "method": { < identifier object of id > }, 
+      "args": [ < array of argument expression objects > ]
+  }
+  ```
+* Static Dispatch Expression (`e1@id1.id2(args)`)
+  ```json
+  {
+      "type": "static-dispatch",
+      "object": { < expression object of e1 > },
+      "class": { < identifier object of id1 > },
+      "method": { < identifier object of id2 > }, 
+      "args": [ < array of argument expression objects > ]
+  }
+  ```
+* Self Dispatch Expression (`id(args)`)
+  ```json
+  {
+      "type": "self-dispatch",
+      "method": { < identifier object of id > }, 
+      "args": [ < array of argument expression objects > ]
+  }
+  ```
+* If Expression (`if(e1) e2 else e3`)
+  ```json
+  {
+      "type": "if",
+      "guard": { < expression object of e1 > },
+      "then": { < expression object of e2 > },
+      "else": { < expression object of e3 > }
+  }
+  ```
+  Note that the `then` and `else` properties will always be `block` expressions
+  in snail.
+* While Expression (`while(e1) e2`)
+  ```json
+  {
+      "type": "while",
+      "guard": { < expression object of e1 > },
+      "body": { < expression object of e2 > },
+  }
+  ```
+  Note that the `body` property will always be a `block` expression in snail.
+* Block Expression (`{ e1; e2; ... }`)
+  ```json
+  {
+      "type": "block",
+      "body": [ < array of expression objects > ]
+  }
+  ```
+* Let Expression (`let id [= exp]?`)
+  ```json
+  {
+      "type": "let",
+      "lhs": { < identifier object of id > },
+      "rhs": { < expression object of exp > }
+  }
+  ```
+  Note that property `rhs` is optional and is only provided if the local
+  variable is initialized.
+* New Expression (`new Class`)
+  ```json
+  {
+      "type": "new",
+      "class": { < identifier object of Class > }
+  }
+  ```
+* New Array Expression (`new[exp] Array`)
+  ```json
+  {
+      "type": "new-array",
+      "size": { < expression object of exp > }
+  }
+  ```
+* Is Void Expression (`isvoid(exp)`)
+  ```json
+  {
+      "type": "isvoid",
+      "body": { < expression object of exp > }
+  }
+  ```
+* Addition Expression (`e1 + e2`)
+  ```json
+  {
+      "type": "plus",
+      "lhs": { < expression object of e1 > },
+      "rhs": { < expression object of e2 > }
+  }
+  ```
+* Subtraction Expression (`e1 - e2`)
+  ```json
+  {
+      "type": "minus",
+      "lhs": { < expression object of e1 > },
+      "rhs": { < expression object of e2 > }
+  }
+  ```
+* Multiplication Expression (`e1 * e2`)
+  ```json
+  {
+      "type": "times",
+      "lhs": { < expression object of e1 > },
+      "rhs": { < expression object of e2 > }
+  }
+  ```
+* Division Expression (`e1 / e2`)
+  ```json
+  {
+      "type": "divide",
+      "lhs": { < expression object of e1 > },
+      "rhs": { < expression object of e2 > }
+  }
+  ```
+* Equals Comparison Expression (`e1 == e2`)
+  ```json
+  {
+      "type": "equals",
+      "lhs": { < expression object of e1 > },
+      "rhs": { < expression object of e2 > }
+  }
+  ```
+* Less-Than Comparison Expression (`e1 < e2`)
+  ```json
+  {
+      "type": "lt",
+      "lhs": { < expression object of e1 > },
+      "rhs": { < expression object of e2 > }
+  }
+  ```
+* Less-Than-Or-Equal-To Comparison Expression (`e1 <= e2`)
+  ```json
+  {
+      "type": "lte",
+      "lhs": { < expression object of e1 > },
+      "rhs": { < expression object of e2 > }
+  }
+  ```
+* Not Expression (`!exp`)
+  ```json
+  {
+      "type": "not",
+      "body": { < expression object of exp > }
+  }
+  ```
+* Negative Expression (`~exp`)
+  ```json
+  {
+      "type": "negate",
+      "body": { < expression object of exp > }
+  }
+  ```
+* Array Access Expression (`e1[e2]`)
+  ```json
+  {
+      "type": "array-access",
+      "object": { < expression object of e1 > },
+      "index": { < expression object of e2 > }
+  }
+  ```
+* Identifier Expression (`id`)
+  ```json
+  {
+      "type": "identifier",
+      "value": { < identifier object of id > }
+  }
+  ```
+* Number Expression (`int`)
+  ```json
+  {
+      "type": "number",
+      "line": < integer line number >,
+      "col": < integer column number >,
+      "value": < integer value of literal >
+  }
+  ```
+  Note that `line` and `col` properties are non-zero, one-indexed integers
+  representing the line and column of the first digit in the number lexeme.
+* String Expression (`string`)
+  ```json
+  {
+      "type": "string",
+      "line": < integer line number >,
+      "col": < integer column number >,
+      "value": < string value of literal >
+  }
+  ```
+  Note that `line` and `col` properties are non-zero, one-indexed integers
+  representing the line and column of the first digit in the string lexeme.
+* Boolean Expression (`bool`)
+  ```json
+  {
+      "type": "bool",
+      "value": < boolean value of bool >
+  }
+  ```
