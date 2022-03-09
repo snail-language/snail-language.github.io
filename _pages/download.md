@@ -21,6 +21,14 @@ platforms.  Please [open an
 issue](https://github.com/snail-language/snail-language.github.io/issues) if
 your platform is not supported.
 
+## Version 1.1.0
+
+
+| Linux binary (tar.gz) | [x86-64](/assets/releases/1.1.0/snail-1.1.0-linux-x86_64.tar.gz){: .btn .btn--info} |  |
+| MacOS binary (tar.gz) | [x86-64](/assets/releases/1.1.0/snail-1.1.0-macos-x86_64.tar.gz){: .btn .btn--info} | [arm64](/assets/releases/1.1.0/snail-1.1.0-macos-arm64.tar.gz){: .btn .btn--danger} |
+| Windows binary (zip) | [x86-64](/assets/releases/1.1.0/snail-1.1.0-win-x86_64.zip){: .btn .btn--info} |
+| [Release Notes]({% post_url 2022-03-09-Version-1.1.0-Released %}) |
+
 ## Version 1.0.1
 
 
