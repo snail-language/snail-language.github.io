@@ -232,6 +232,21 @@ table.
 | `!`           | none          |            |
 | `=`           | none          | *lowest*   |
 
+### Line Numbers
+The line number for an expression is the line number of the first token that is
+part of that expression.
+
+For example:
+{% highlight js linenos %}
+while ( x <=
+              99 ) {
+  x = x + 1;
+}
+{% endhighlight %}
+
+The `while` expression is on line 1, the `x <= 99` expression is on line 1, the
+`99` expression is on line 2, the `{ x = x + 1; }` block expression is on line
+2, and both the `x = x + 1` and `x + 1` expressions are on line 3.
 
 ## Data Representation
 
