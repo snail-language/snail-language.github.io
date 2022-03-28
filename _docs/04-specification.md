@@ -290,7 +290,7 @@ The corresponding SL-LEX output is:
 ```
 1
 1
-identifier
+ident
 Backslash
 1
 11
