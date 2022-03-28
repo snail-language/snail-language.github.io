@@ -111,12 +111,12 @@ times).
 program ::= (class)+
 class   ::= 'class' 'ident' (':' 'ident')? '{' (feature)* '}' ';'
 feature ::= 'let' 'ident' ('=' expr)? ';'
-          | 'ident' '(' ('ident' (',' 'ident')*)? ')' '{' block '}' ';'
+          | 'ident' '(' ('ident' (',' 'ident')*)? ')' block ';'
 expr    ::= 'ident' '=' expr
           | expr '[' expr ']' '=' expr
           | (expr ('@' 'ident')? '.')? 'ident' '(' (expr (',' expr)*)? ')'
-          | 'if' '(' expr ')' '{' block '}' 'else' '{' block '}'
-          | 'while' '(' expr ')' '{' block '}'
+          | 'if' '(' expr ')' block 'else' block 
+          | 'while' '(' expr ')' block
           | block
           | 'let' 'ident' ('=' expr)?
           | 'new' 'ident'
