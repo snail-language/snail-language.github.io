@@ -249,11 +249,93 @@ The `while` expression is on line 1, the `x <= 99` expression is on line 1, the
 2, and both the `x = x + 1` and `x + 1` expressions are on line 3.
 
 ## Data Representation
+Every value in snail is an object.  Objects contain a list of member variables
+(or *attributes*).  Additionally, each object belongs to some class defined in
+the language specification or program source code. This documentation uses the
+following syntax to denote values in snail:
 
+$$X(a_1 = l_1, a_2 = l_2, \ldots, a_n = l_n)$$
+
+$$X$$ is the class associated with the value, which contains attributes (member
+variables) $$a_1, \ldots, a_n$$, and each of these attributes is located at an
+*abstract* memory location specified by $$l_1, \ldots, l_n$$.  This implies that
+there is space reserved in memory for each of the the member variables in this
+object.
+
+Built-in object types in snail (i.e., `Array`, `Bool`, `Int`, `String`) use a
+special version of the syntax above. The attributes of these classes cannot be
+modified directly, so we do not specify the locations of each attribute, but
+rather their exact values:
+
+* $$Array(3, [X(\ldots), X(\ldots), X(\ldots)])$$: An `Array` contains its size and
+  the array of values.
+* $$Bool(true)$$: A `Bool` contains its Boolean value.
+* $$Int(5)$$: An `Int` contains its integer value.
+* $$String(5, \texttt{"snail"})$$: A `String` contains its length and contents.
 
 ## Operational Semantics
+The operational semantics of snail define the value produced by each of the
+different expression types in the language, given a particular context. A
+context consists of three elements: the "self" object, an environment of
+in-scope variables, and a store of all live variables.
+
+We present these rules semi-formally.  Note that our presentation specifies
+*behavior* but does not describe an explicit *implementation*.
 
 ### Environment and Store
+The *environment* is a mapping of variable identifiers to *abstract* memory
+*locations*. That is, the environment tells us where in memory each variable is
+stored.  In a valid snail program, each identifier used in an expression will be
+contained within the environment.  For example, the expression `a + b` will only
+be valid in a context with an environment containing mappings for `a` and `b`.
+
+We will use the following notation to describe the contents of an environment:
+
+$$E = \left\lbrace a : l_1, b : l_2 \right\rbrace$$
+
+This environment maps `a` to location $$l_1$$ and `b` to location $$l_2$$.
+
+The *store* is a mapping of abstract memory locations to *values*. Values in
+snail are objects.  That is, the store tells us what object is associated with
+each memory location. We will use the same notation for both stores and
+environments:
+
+$$S = \left\lbrace l_1 : Int(1), l_2 : Int(2) \right\rbrace$$
+
+This store maps $$l_1$$ to an integer object containing 1 and $$l_2$$ to an
+integer object containing 2.
+
+Together, the environment and store allow us to model variables in program
+execution. The double indirection allows for a decoupling of scope and memory,
+which is needed to support object that exist on the heap and that can be
+aliased.
+
+Given some environment and store, the value of a variable can be determined by
+first looking up the location of the variable's identifier in the environment
+and then looking up the value at this location in the store.
+
+$$\begin{aligned}
+E(a) &= l_1 \\
+S(l_1) &= 1
+\end{aligned}$$
+
+Assignments require replacing a value in the store, but do not affect the
+environment mapping. For example, assigning 45 to `a` would require updating the
+value stored at $$l_1$$.
+
+$$\begin{aligned}
+E(a) &= l_1\\
+S' &= S\left[ 45 / l_1 \right]
+\end{aligned}$$
+
+The syntax, $$S\left[v/l\right]$$ denotes constructing a new store, $$S'$$ that
+is identical to $$S$$ except that $$S'$$ maps location $$l$$ to value $$v$$. The
+remaining locations remain unchanged.  Similar notation my be used to introduce
+variables into an environment.
+
+We will also use the function $$newloc(S)$$ to find an unused location in a
+given store.  The location returned by $$newloc(S)$$ will be *fresh*, meaning
+that there exists no mapping in $$S$$ for this location.
 
 ### Typing Rules
 
