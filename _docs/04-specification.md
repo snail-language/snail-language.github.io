@@ -338,9 +338,64 @@ given store.  The location returned by $$newloc(S)$$ will be *fresh*, meaning
 that there exists no mapping in $$S$$ for this location.
 
 ### Typing Rules
+Before executing, the AST will be checked for any cycles in the inheritance of
+classes in the program. If a cycle is found, this will produce a runtime error
+on line 0 of the program.
+
+Snail is a *dynamically* typed language.  The type of any variable is the type
+of data most recently assigned to it.  Similarly, the type of any expression is
+the type of the value produced by evaluating that statement.
+
+To ensure the correctness of evaluating a snail program, types of certain
+expressions must be checked as part of the expression evaluation process. These
+checks are listed below.
+
+#### Arrays
+* An array access may only be performed on a value of type `Array`
+* The value of the index in an array access must be of type `Int`
+* When constructing an `Array` the type of the size must be an `Int`
+
+
+#### Dispatch (Method Calls)
+* Dispatches may not occur on `void` objects
+* The name of the method must exist in the specified object
+* The number of arguments provided must match the number of parameters in the
+  method definition
+* In a static dispatch, the type specified must exist in the program
+* In a static dispatch, the type specified must be the current class or an
+  ancestor class
+
+#### Conditionals and Loops
+* The value produced by the predicate guard must be of type `Bool`
+
+#### Arithmetic
+*  All values on arithmetic operations must be of type `Int`
+
+#### Logical Operations (not)
+* The value in the expression being negated must be of type `Bool`
+
+#### Built-In Class Methods
+* The type of the argument to `Object.is_a` must be `String`
+* The type of the argument to `String.concat` must be `String`
+* The type of both arguments to `String.substr` must be `String`
+* The type of the argument to `IO.print_string` must be `String`
+* The type of the argument to `IO.print_int` must be `Int`
 
 ### Operational Rules
 
+#### Runtime Errors
+There are several other runtime errors that snail should check while executing:
+
+* Division by zero
+* Attempting to access an unbound (possibly out-of-scope variable)
+* Array indices fall outside the bounds of the allocated space
+* Arrays cannot be copied using `Object.copy`
+* `String.substr` indices must be within the bounds and length of the string
+* While not an error, Array indices are only guaranteed to be valid in the range
+  $$0 \leqslant i \leqslant 2^{30}$$
+
+In all of these cases, a runtime error should be generated, and the program
+should exit.
 ## Interchange Formats
 The snail specification provides formats for serializing tokens and abstract
 syntax trees.  These formats designed to be simple to parse either manually or
