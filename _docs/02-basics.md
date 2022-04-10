@@ -152,7 +152,7 @@ class Student : Person {
     let id = 0;
 
     init(first, last, s_id) {
-        init@Person(first, last);
+        self@Person.init(first, last);
         id = s_id;
     };
 
