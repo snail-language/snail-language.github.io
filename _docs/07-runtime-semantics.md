@@ -546,3 +546,6 @@ In all of these cases, a runtime error should be generated, and the program
 should flush output and exit.
 
 Stack and heap overflows are platform-dependent.
+
+## Program Execution
+Program execution begins by evaluating ``(new Main).main()``.
