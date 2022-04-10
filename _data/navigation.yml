@@ -20,3 +20,11 @@ docs:
     children:
       - title: "Specification"
         url: /docs/specification
+      - title: "Lexical Structure"
+        url: /docs/lexical-structure
+      - title: "Syntax"
+        url: /docs/syntax
+      - title: "Runtime Semantics"
+        url: /docs/runtime-semantics
+      - title: "Interchange Formats"
+        url: /docs/interchange-formats
