@@ -371,11 +371,11 @@ Dispatch, or method calls, have three supported formats. *Dynamic* dispatch
 calls a method on another value.  The number of arguments in a dispatch must
 match the number of parameters in the method definition.
 
-First, the value is determined.  Then, each of the arguments is evaluated from
-left to right.  These values are then stored in the parameters of the target
-value's method.  Inheritance rules are used to determine the method that is
-selected. Finally, the body of this method is evaluated, producing the value of
-this dispatch.
+First, each of the arguments is evaluated from left to right.  These values are
+then stored in the parameters of the target value's method.  Then, the value of
+the target object is determined.  Inheritance rules are used to determine the
+method that is selected. Finally, the body of this method is evaluated,
+producing the value of this dispatch.
 
 If the reference implementation detects an inheritance cycle during a dispatch,
 it will exit with an error.
