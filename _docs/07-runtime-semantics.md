@@ -142,7 +142,7 @@ checks are listed below.
 #### Built-In Class Methods
 * The type of the argument to `Object.is_a` must be `String`
 * The type of the argument to `String.concat` must be `String`
-* The type of both arguments to `String.substr` must be `String`
+* The type of both arguments to `String.substr` must be `Int`
 * The type of the argument to `IO.print_string` must be `String`
 * The type of the argument to `IO.print_int` must be `Int`
 
