@@ -424,9 +424,9 @@ Any other comparison returns `false` if the values are not equal.
 #### New Objects
 Instantiating a new object requires allocating new memory locations for each
 member variable (attribute).  Initially, the value for each of these attributes
-is set to `void`.  Then, each attribute is initialized in turn.  If an attribute
-does not have an initializer, *do not* evaluate an assignment expression for it
-in the last step.
+is set to `void`.  Then, each attribute is initialized in turn in its own
+local scope.  If an attribute does not have an initializer, *do not* evaluate an
+assignment expression for it in the last step.
 
 $$
 \frac{\begin{aligned}
@@ -434,8 +434,8 @@ class(T) &= (a_1 = e_1, \ldots, a_n = e_n)\\
 l_i &= newloc(S), for\; i = 1 \dots n\; and\; each\; l_i\; is\; distinct\\
 v_1 &= T(a_1 = l_1, \ldots, a_n = l_n) \\
 S_1 &= S\left[\texttt{void}/l_1, \ldots, \texttt{void}/l_n\right] \\
-E_1 &= {a_1 : l_1, \ldots, a_n : l_n} \\
-v, E', S' &\vdash \left\{ a_1 = e_1; \cdots; a_n = e_n \right\} : v_1, E_2, S_2
+E_1 &= \left\{a_1 : l_1, \ldots, a_n : l_n\right\} \\
+v_1, E_1, S_1 &\vdash \left\{ a_1 = \left\{e_1;\right\}; \cdots; a_n = \left\{e_n;\right\} \right\} : v_2, E_2, S_2
 \end{aligned}}
 {so,E,S \vdash new\; T : v_1, E, S_2}\mbox{[New]}
 $$
@@ -448,7 +448,7 @@ $$
 so, E, S &\vdash e_1 : Int(i), E_1, S_1\\
 v &= Array(i, [\texttt{void}_1, \ldots, \texttt{void}_i])
 \end{aligned}}
-{so,E,S \vdash new[e_1]\; Array : Array(l, arr), E_1, S_1}\mbox{[New-Array]}
+{so,E,S \vdash new[e_1]\; Array : v, E_1, S_1}\mbox{[New-Array]}
 $$
 
 #### Dispatch
