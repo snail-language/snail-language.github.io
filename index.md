@@ -41,7 +41,7 @@ when evaluated.
 
 
 ```reasonml
-class Main {
+class Main : IO {
     main() {
         print_string("Hello, world.\n");
     };
