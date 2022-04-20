@@ -176,7 +176,7 @@ identifier.
 
 $$\frac{\begin{aligned}
 so,E,S &\vdash e_1 : v_1, E_1, S_1\\
-E(Id) &= l_1\\
+E_1(Id) &= l_1\\
 S_2 &= S_1\left[v_1/l_1\right]
 \end{aligned}}{so,E,S \vdash Id = e_1 : v_1, E_1, S_2}\mbox{[Assign]}$$
 
