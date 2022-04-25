@@ -303,7 +303,7 @@ $$
 $$
 \frac{\begin{aligned}
 so,E,S &\vdash e_1 : Bool(true), E_1, S_1\\
-so,E_1,S_1 &\vdash e_2 : v_2, E_2, S_2\\
+so,E_1,S_1 &\vdash e_body : v_2, E_2, S_2\\
 so,E_2,S_2 &\vdash while (e_1)\; e_{body} : \texttt{void}, E_3, S_3
 \end{aligned}}
 {so,E,S \vdash while (e_1)\; e_{body} : \texttt{void}, E_3, S_3}\mbox{[While-True]}
