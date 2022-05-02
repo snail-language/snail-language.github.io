@@ -525,7 +525,7 @@ E_{dispatch} &= \left\{ a_1 : l_{a_1}, \dots, a_m : l_{a_m}, x_1 : l_{x_1}, \ldo
 S_{n+1} &= S_{n}\left[ v_1/l_{x_1}, \ldots, v_n/l_{x_n} \right] \\
 so,E_{dispatch},S_{n+1} &\vdash e_{body} : v_{ret}, E_{ret}, S_{n+2}
 \end{aligned}}
-{so,E,S \vdash e_0.f(e_1, \ldots, e_n) : v_{ret}, E_{n}, S_{n+2}}\mbox{[Self-Dispatch]}
+{so,E,S \vdash f(e_1, \ldots, e_n) : v_{ret}, E_{n}, S_{n+2}}\mbox{[Self-Dispatch]}
 $$
 
 The behavior of dispatches on instances of built-in classes are defined on the [Built-In Classes](/docs/classes) page.
