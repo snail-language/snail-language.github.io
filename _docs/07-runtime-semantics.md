@@ -191,7 +191,7 @@ $$
 so,E,S &\vdash e_1 : v_1, E_1, S_1\\
 so,E_1,S_1 &\vdash e_2 : Array(l,arr), E_2, S_2\\
 so,E_2,S_2 &\vdash e_3 : Int(i), E_3, S_3\\
-0 \leqslant &i \leqslant l\\
+0 \leqslant &i < l\\
 arr[i] &= v_1
 \end{aligned}}{so,E,S \vdash e_2[e_3] = e_1 : v_1, E_2, S_2}\mbox{[Array-Assign]}
 $$
@@ -222,7 +222,7 @@ $$
 \frac{\begin{aligned}
 so,E,S &\vdash e_1 : Array(l, arr), E_1, S_1\\
 so,E_1,S_1 &\vdash e_2 : Int(i), E_2, S_2\\
-0 \leqslant &i \leqslant l\\
+0 \leqslant &i < l\\
 v &= arr[i]
 \end{aligned}}
 {so,E,S \vdash e_1[e_2] : v, E_2, S_2}\mbox{[Array-Access]}
