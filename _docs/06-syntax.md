@@ -111,6 +111,8 @@ semicolons.
 
 It is a parse error to name a member variable `self`.  
 
+It is a parse error for a method parameter to be named `self`.
+
 ### Expressions
 ![](/assets/svg/expression.svg){: .expression-rr}
 
@@ -118,9 +120,13 @@ Expressions make up the majority of the snail grammar.  The individual behavior
 of each expression type is described on the [Language
 Basics](/docs/language-basics) page.  
 
-It is a parse error to name a local variable `self`.
+It is a parse error to name a local variable `self`. It is also a parse error to
+assign a value to `self`.
 
-It is a parse error for the identifier following the square brackets in a `new-array` expression to be anything but `Array` (case sensitive).
+It is a parse error for the identifier following the square brackets in a
+`new-array` expression to be anything but `Array` (case sensitive).  Similarly,
+it is a parse error for a `new` expression to construct an `Array` (case
+sensitive).
 
 ### Blocks
 ![](/assets/svg/block.svg){: .block-rr}
