@@ -10,9 +10,6 @@ sidebar:
     nav: "docs"
 ---
 
-{: .notice--info}
-This page is still under active development.
-
 ## Data Representation
 Every value in snail is an object.  Objects contain a list of member variables
 (or *attributes*).  Additionally, each object belongs to some class defined in
