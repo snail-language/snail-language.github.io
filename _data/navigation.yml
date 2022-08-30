@@ -5,6 +5,8 @@ main:
     url: /downloads
   - title: "About"
     url: /about
+  - title: "Initiatives"
+    url: /initiatives
   
 
 docs:
