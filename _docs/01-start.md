@@ -16,7 +16,7 @@ representations.
 
 # Obtaining and Running the Interpreter
 
-Go to the [Downloads](/download) page to obtain a copy of the reference
+Go to the [Downloads](/downloads) page to obtain a copy of the reference
 interpreter. To run a snail program with the interpreter, pass the file in as a
 command line argument:
 
