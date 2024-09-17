@@ -24,7 +24,7 @@ your platform is not supported.
 ## Version 1.3.0
 
 
-| Linux binary (tar.gz) | [x86-64](/assets/releases/1.3.0/snail-1.3.0-linux-x86_64.tar.gz){: .btn .btn--info} | [armhf](/assets/releases/1.3.0/snail-1.3.0-linux-armhf.tar.gz){: .btn .btn--warning} |
+| Linux binary (tar.gz) | [x86-64](/assets/releases/1.3.0/snail-1.3.0-linux-x86_64.tar.gz){: .btn .btn--info} | [armhf](/assets/releases/1.3.0/snail-1.3.0-linux-armhf.tar.gz){: .btn .btn--warning} | [arm64](/assets/releases/1.3.0/snail-1.3.0-linux-arm64.tar.gz){: .btn .btn--danger}
 | MacOS binary (tar.gz) | [x86-64](/assets/releases/1.3.0/snail-1.3.0-macos-x86_64.tar.gz){: .btn .btn--info} | [arm64](/assets/releases/1.3.0/snail-1.3.0-macos-arm64.tar.gz){: .btn .btn--danger} |
 | Windows binary (zip) | [x86-64](/assets/releases/1.3.0/snail-1.3.0-win-x86_64.zip){: .btn .btn--info} |
 | [Release Notes]({% post_url 2023-05-04-Version-1.3.0-Released %}) |
