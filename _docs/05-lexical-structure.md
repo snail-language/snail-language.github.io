@@ -24,7 +24,7 @@ integer. 64-bit signed integers range from $$-2^{63}$$ to $$2^{63}-1$$.
 Identifiers are strings (other than keywords) that conform to a modified [Unicode's
 identifier specification](https://unicode.org/reports/tr31/).  In particular,
 snail uses the "XID" identifier specification. In addition, snail allows identifiers 
-to start with an "_" character. (i.e both "_snail" and "_" are valid identifiers)
+to start with an "\_" character. (i.e both "_snail" and "\_" are valid identifiers)
 
 Both variable names and class names are treated as identifiers in snail.
 Notably, keywords, are treated separately from identifiers.
